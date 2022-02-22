@@ -1,3 +1,6 @@
+from math import log2, ceil
+from sympy.combinatorics.graycode import GrayCode
+
 k = 18
 gray_len = ceil(log2(k + 1))
 print(f"k={k}, gray_len={gray_len}")
