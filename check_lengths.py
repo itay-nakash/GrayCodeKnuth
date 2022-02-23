@@ -1,9 +1,11 @@
+#!/usr/bin/python3.8
+import sys
 from math import log2, ceil
 from sympy.combinatorics.graycode import GrayCode
 
-k = 18
+k = int(sys.argv[1]) if len(sys.argv) > 1 else 18
 gray_len = ceil(log2(k + 1))
-print(f"k={k}, gray_len={gray_len}")
+print(f"{k=}, {gray_len=}")
 for i in range(2**k):
     word = bin(i)[2:].zfill(k)
     g = GrayCode(gray_len)
