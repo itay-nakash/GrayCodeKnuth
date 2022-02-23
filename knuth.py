@@ -196,13 +196,16 @@ def add_balance_bit(encoded_string, counter):
 
 
 def encode_gray_knuth(string):
-    gray_len = ceil(log2(len(string) + 1))
+    gray_len = ceil(log2(2 * len(string) + 1))
     gray_code = GrayCode(gray_len)
     encoded_data_prefix = ''
-    for i, suffix in zip(range(len(string) + 1), gray_code.generate_gray()):
-        if i > 0:
-            encoded_data_prefix += str(1 - int(string[i - 1]))
-        encoded_data = encoded_data_prefix + string[i:]
+    for i, suffix in zip(range(2 * len(string) + 1), gray_code.generate_gray()):
+        if i <= len(string):
+            if i > 0:
+                encoded_data_prefix += str(1 - int(string[i - 1]))
+            encoded_data = encoded_data_prefix + string[i:]
+        else:
+            encoded_data = string[:i - len(string)] + encoded_data_prefix[i - len(string):]
         encoded_string = encoded_data + suffix
         counter = Counter(encoded_string)
         balanced_encoded_string = add_balance_bit(encoded_string, counter)
@@ -211,10 +214,11 @@ def encode_gray_knuth(string):
 
 
 def get_encoded_length(data_len):
-    return data_len + ceil(log2(data_len + 1)) + 1
+    return data_len + ceil(log2(2 * data_len + 1)) + 1
 
 
 def find_decoded_length(encoded_length):
+    # doesn't work with the new calculation
     approx_len = (lambertw(log(2) * 2 ** encoded_length) / log(2)) - 1
     approx_len = floor(approx_len.real)
     while get_encoded_length(approx_len) < encoded_length:
@@ -245,4 +249,8 @@ def decode_gray_knuth(string, decoded_length=0):
         decoded_length = find_decoded_length2(len(string))
     gray_index = string[decoded_length:-1]
     index = int(gray_to_bin(gray_index), 2)
-    return ''.join([str(1 - int(bit)) for bit in string[:index]]) + string[index:decoded_length]
+    if index <= decoded_length:
+        return ''.join([str(1 - int(bit)) for bit in string[:index]]) + string[index:decoded_length]
+    else:
+        index = index - decoded_length
+        return string[:index] + ''.join([str(1 - int(bit)) for bit in string[index:decoded_length]])
