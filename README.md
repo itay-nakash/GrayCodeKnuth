@@ -18,8 +18,18 @@ In addition, it uses SymPy library and require its installation.
 ### Installation
 
 In order to install all the relevant libraries for running and testing, run (in the root dir of the project):
-```bash
+```shell
 python3 setup.py install
+```
+
+### Importing
+
+Add the following lines:
+```python
+from gray_knuth import encode_gray_knuth, decode_gray_knuth
+encoded_data = encode_gray_knuth('100101100')
+decoded_data = decode_gray_knuth(encoded_data)
+decode_gray_knuth(encoded_data, decoded_length=9)
 ```
 
 ## Tests
@@ -37,6 +47,12 @@ After passing all the tests for those words, we added tests for long information
 We choose randomly 100 vectors in different (and long) lengths (for example, 500 or 1000),
 and we test our encoding algorithm on those vectors.
 
+### Run tests
+
+After installing the package, run:
+```shell
+pytest
+```
 
 ## Authors
 
