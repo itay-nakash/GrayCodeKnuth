@@ -1,14 +1,32 @@
 from collections import Counter
-from math import ceil, floor, log2, log
+from math import ceil, log2
 
 from sympy.combinatorics.graycode import GrayCode, gray_to_bin
 
 
 def get_gray_length(n):
+    """
+    :param n: The length of the raw data
+    :return: The length of the gray code required for indices of this data
+    """
     return ceil(log2(2 * n + 1))
 
 
+def get_encoded_length(data_len):
+    """
+    :param data_len: The length of the raw data
+    :return: The length of the encoded data
+    """
+    return data_len + get_gray_length(data_len) + 1
+
+
 def add_balance_bit(encoded_string, counter):
+    """
+    Adds a balance bit (a bit that's used to compensate for the 2-jumps in the encoding process)
+    :param encoded_string: The encoded (data + gray index) string.
+    :param counter: Counter for the amount of 0's and 1's in encoded_string.
+    :return: encoded_string with a balance bit as a suffix, if it's possible to balance it, otherwise None.
+    """
     if 0 <= (counter['1'] - counter['0']) <= 2:
         return encoded_string + '0'
     elif 1 <= (counter['0'] - counter['1']) <= 2:
@@ -31,10 +49,6 @@ def encode_gray_knuth(string):
         balanced_encoded_string = add_balance_bit(encoded_string, counter)
         if balanced_encoded_string:
             return balanced_encoded_string
-
-
-def get_encoded_length(data_len):
-    return data_len + get_gray_length(data_len) + 1
 
 
 def find_decoded_length(encoded_length):
