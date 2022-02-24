@@ -27,7 +27,7 @@ in different lenghts.
 
 Initally we test our algorithm on all the vectors under 13 bits.
 After passing all the tests for those words, we added tests for long information vectors.
-We choose randomly 100 vectors in different (and big) lenghts (for example, 500 or 1000),
+We choose randomly 100 vectors in different lenghts (for example, 500 or 1000),
 and we test sucssesfully our encoding algorithm on those vectors.
 
 
