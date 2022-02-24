@@ -1,7 +1,11 @@
-from math import ceil, floor, log2, log
-from sympy.combinatorics.graycode import GrayCode, gray_to_bin
-from scipy.special import lambertw
 from collections import Counter
+from math import ceil, floor, log2, log
+
+from sympy.combinatorics.graycode import GrayCode, gray_to_bin
+
+
+def get_gray_length(n):
+    return ceil(log2(2 * n + 1))
 
 
 def add_balance_bit(encoded_string, counter):
@@ -12,7 +16,7 @@ def add_balance_bit(encoded_string, counter):
 
 
 def encode_gray_knuth(string):
-    gray_len = ceil(log2(2 * len(string) + 1))
+    gray_len = get_gray_length(len(string))
     gray_code = GrayCode(gray_len)
     encoded_data_prefix = ''
     for i, suffix in zip(range(2 * len(string) + 1), gray_code.generate_gray()):
@@ -30,21 +34,10 @@ def encode_gray_knuth(string):
 
 
 def get_encoded_length(data_len):
-    return data_len + ceil(log2(2 * data_len + 1)) + 1
+    return data_len + get_gray_length(data_len) + 1
 
 
 def find_decoded_length(encoded_length):
-    # doesn't work with the new calculation
-    approx_len = (lambertw(log(2) * 2 ** encoded_length) / log(2)) - 1
-    approx_len = floor(approx_len.real)
-    while get_encoded_length(approx_len) < encoded_length:
-        approx_len += 1
-    while get_encoded_length(approx_len) > encoded_length:
-        approx_len -= 1
-    return approx_len
-
-
-def find_decoded_length2(encoded_length):
     start = 0
     end = encoded_length
 
@@ -62,7 +55,7 @@ def find_decoded_length2(encoded_length):
 
 def decode_gray_knuth(string, decoded_length=0):
     if decoded_length == 0:
-        decoded_length = find_decoded_length2(len(string))
+        decoded_length = find_decoded_length(len(string))
     gray_index = string[decoded_length:-1]
     index = int(gray_to_bin(gray_index), 2)
     if index <= decoded_length:
