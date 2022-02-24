@@ -4,7 +4,7 @@ from math import ceil
 
 import pytest
 
-from knuth import encode_gray_knuth, decode_gray_knuth, find_decoded_length
+from gray_knuth import encode_gray_knuth, decode_gray_knuth, find_decoded_length
 
 
 def check_encoding(original):
@@ -40,4 +40,4 @@ def test_random_long_data(length):
     (14, 8)
 ])
 def test_find_decoded_length(encoded_length, decoded_length):
-    assert(find_decoded_length(encoded_length) == decoded_length)
+    assert (find_decoded_length(encoded_length) == decoded_length)
