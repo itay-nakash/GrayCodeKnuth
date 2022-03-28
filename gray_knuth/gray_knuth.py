@@ -130,8 +130,8 @@ def decode_gray_knuth(string, decoded_length=0):
 
 def validate_input(input):
     for c in input:
-        if c != '0' or c!= '1':
-            raise Exception("The input should be binary string") 
+        if c != '0' and c!= '1':
+            raise Exception("The input should be binary string, the char " + str(c) + " is illegal") 
 
 
 def encode_gray_knuth_from_file(filename):
