@@ -69,9 +69,10 @@ def add_balance_bit(encoded_string, counter):
 def encode_gray_knuth(string):
     """
     Encodes the given binary string using GrayKnuth® algorithm.
-    :param string: Data to encode.
+    :param string: Data to encode (a number represented in binary format).
     :return: Encoded data.
     """
+    validate_input(string)
     gray_len = get_gray_length(len(string))
     gray_code = GrayCode(gray_len)
     flipped_data = string
@@ -89,8 +90,8 @@ def find_decoded_length(encoded_length):
     Finds the length of the decoded data according to the length of the encoded data.
     Implemented using a binary search, relying on the fact that the encoded length as function of the decoded length
     is increasing.
-    :param encoded_length: Length of the encoded data.
-    :return: Length of the decoded data.
+    :param encoded_length: Length of the encoded data. (as a number and not a binary string)
+    :return: Length of the decoded data. (as a number and not a binary string)
     """
     start = 0
     end = encoded_length
@@ -110,11 +111,12 @@ def find_decoded_length(encoded_length):
 def decode_gray_knuth(string, decoded_length=0):
     """
     Decodes the given binary string using GrayKnuth® algorithm.
-    :param string: Data to decode.
+    :param string: Data to decode. (as a GrayKnuth binary string)
     :param decoded_length: Optional. The expected length of the decoded data. If 0 - it is determined by the length
     of the encoded data.
-    :return: Decoded data.
+    :return: Decoded data. (as a binary string)
     """
+    validate_input(string)
     if decoded_length == 0:
         decoded_length = find_decoded_length(len(string))
     gray_index = string[decoded_length:-1]
@@ -124,3 +126,34 @@ def decode_gray_knuth(string, decoded_length=0):
     else:
         index = index - decoded_length
         return string[:index] + flip_string(string[index:decoded_length])
+
+
+def validate_input(input):
+    for c in input:
+        if c != '0' or c!= '1':
+            raise Exception("The input should be binary string") 
+
+
+def encode_gray_knuth_from_file(filename):
+    """
+    Encodes binary string from a file, using GrayKnuth® algorithm.
+    :param filename: a path to file that contains the Data to encode (a number represented in binary format).
+    :return: Encoded data.
+    """ 
+    return encode_gray_knuth(open(filename,"r").read())
+
+
+def decode_gray_knuth_to_file(string, filename, decoded_length=0):
+    """
+    Decodes the given binary string to a file using GrayKnuth® algorithm.
+    :param string: Data to decode. (as a GrayKnuth binary string)
+    :param decoded_length: Optional. The expected length of the decoded data. If 0 - it is determined by the length
+    of the encoded data.
+    :param filename: a path to create the file that will contain the decoded string.
+    :return: void
+    """
+    decoded_word = decode_gray_knuth(string,decoded_length)
+    f = open(filename,"a")
+    f.write(decoded_word)
+    f.close
+
